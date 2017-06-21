@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Vitcc Universal Database</string>
+    <string name="title_activity_user_added">UserAdded</string>
+    <string name="title_activity_user_dashboard">UserDashboard</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string-array name="requestTypes">
+        <item>Music</item>
+        <item>Movie</item>
+        <item>Series</item>
+        <item>Game</item>
+        <item>Document or Book</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="minQuality">
+        <item>Any</item>
+        <item>Not Applicable</item>
+        <item>Cam Print(Movies)</item>
+        <item>360p</item>
+        <item>480p</item>
+        <item>720p</item>
+        <item>1080p</item>
+        <item>Blu-ray</item>
+        <item>Scanned Copy (Documents)</item>
+        <item>Print Copy (Documents)</item>
+    </string-array>
+    <string-array name="languages">
+        <item>Any</item>
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Telugu</item>
+        <item>Tamil</item>
+        <item>Malayalam</item>
+        <item>Kannada</item>
+        <item>Other Indian Language</item>
+        <item>Foreign Language</item>
+    </string-array>
+    <string name="title_activity_user_profile">UserProfile</string>
+</resources>

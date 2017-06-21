@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kleptomaniac.vitccuniversaldatabase.CategoryChooserActivity">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="18dp"
+        android:text="Select Categories"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Languages and other things can be selected from settings later"
+        android:layout_below="@+id/textView2"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_marginRight="18dp" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        app:srcCompat="@drawable/ic_headphones"
+        android:layout_marginEnd="21dp"
+        android:layout_below="@+id/textView3"
+        android:layout_alignEnd="@+id/musicBox"
+        tools:ignore="VectorDrawableCompat" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_film"
+        tools:ignore="VectorDrawableCompat"
+        android:layout_above="@+id/musicBox"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_file"
+        tools:ignore="VectorDrawableCompat"
+        android:layout_above="@+id/gamesBox"
+        android:layout_alignEnd="@+id/musicBox" />
+
+    <CheckBox
+        android:id="@+id/musicBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Music"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/imageView5"
+        android:layout_alignStart="@+id/textView3" />
+
+    <CheckBox
+        android:id="@+id/movieBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Movies"
+        android:layout_alignBaseline="@+id/musicBox"
+        android:layout_alignBottom="@+id/musicBox"
+        android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:id="@+id/documentBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Documents"
+        android:layout_alignBaseline="@+id/gamesBox"
+        android:layout_alignBottom="@+id/gamesBox"
+        android:layout_alignStart="@+id/musicBox" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/imageView6"
+        android:layout_below="@+id/movieBox"
+        android:layout_marginTop="55dp"
+        app:srcCompat="@drawable/ic_games"
+        tools:ignore="VectorDrawableCompat" />
+
+    <CheckBox
+        android:id="@+id/gamesBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/movieBox"
+        android:layout_below="@+id/imageView9"
+        android:layout_marginTop="19dp"
+        android:text="Games" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:textColor="#fff"
+        android:background="@color/colorPrimaryDark"
+        android:elevation="22dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/gamesBox"
+        android:layout_marginBottom="38dp"
+        android:onClick="next"/>
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_video"
+        android:layout_alignTop="@+id/imageView6"
+        android:layout_alignEnd="@+id/seriesBox"
+        android:layout_marginEnd="20dp"
+        tools:ignore="VectorDrawableCompat" />
+
+    <CheckBox
+        android:id="@+id/seriesBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Series"
+        android:layout_alignBaseline="@+id/movieBox"
+        android:layout_alignBottom="@+id/movieBox"
+        android:layout_alignEnd="@+id/textView3"
+        android:layout_marginEnd="21dp" />
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/imageView10"
+        android:layout_alignTop="@+id/imageView9"
+        app:srcCompat="@drawable/ic_settings"
+        tools:ignore="VectorDrawableCompat" />
+
+    <CheckBox
+        android:id="@+id/othersBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/gamesBox"
+        android:layout_alignBottom="@+id/gamesBox"
+        android:layout_alignEnd="@+id/seriesBox"
+        android:text="Others" />
+
+</RelativeLayout>

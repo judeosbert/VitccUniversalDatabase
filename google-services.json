@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "672016845990",
+    "firebase_url": "https://vitccuniversaldatabase.firebaseio.com",
+    "project_id": "vitccuniversaldatabase",
+    "storage_bucket": "vitccuniversaldatabase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672016845990:android:310ce81d4aff9f37",
+        "android_client_info": {
+          "package_name": "com.example.kleptomaniac.vitccuniversaldatabase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "672016845990-i4an178mtqd62f93s6gtijnl7ubj9l0a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kleptomaniac.vitccuniversaldatabase",
+            "certificate_hash": "e839561bb9811cfe0b7817fcef671905e89f7c1f"
+          }
+        },
+        {
+          "client_id": "672016845990-ar4ercs1rmas62o20f9nn8eva3n56c6e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIBP3xKlUh9BH7paVv8ASAsDHAFOF4Bus"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "672016845990-ar4ercs1rmas62o20f9nn8eva3n56c6e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
