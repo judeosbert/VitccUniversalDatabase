@@ -341,7 +341,7 @@ public class UserDashboard extends AppCompatActivity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
-                    Log.e("VITCC",dataSnapshot.getValue().toString());
+                    Log.e("VITCC Child Listener",dataSnapshot.getValue().toString());
                     ContentRequest contentRequest = dataSnapshot.getValue(ContentRequest.class);
 
                            if (finalCat == "music")

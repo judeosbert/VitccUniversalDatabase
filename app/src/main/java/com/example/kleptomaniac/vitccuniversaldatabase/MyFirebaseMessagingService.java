@@ -35,6 +35,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         {
             Log.e(TAG,"Body"+remoteMessage.getNotification().getBody());
         }
+        sendNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
     }
 
 
@@ -42,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         Log.e(TAG, "Short lived task is done.");
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String title,String messageBody) {
         Intent intent = new Intent(this, UserDashboard.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -51,7 +52,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_check)
-                .setContentTitle("VITCC Database Message")
+                .setContentTitle(title)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

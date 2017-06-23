@@ -1,10 +1,13 @@
 package com.example.kleptomaniac.vitccuniversaldatabase;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +44,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
     {
         this.requestList = requestList;
     }
+    public ContentRequest object;
 
 
 
@@ -55,17 +59,61 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         final ContentRequest contentRequest = requestList.get(position);
+        object = new ContentRequest(contentRequest);
         holder.movieName.setText(contentRequest.getMovieName());
         holder.fileType.setText("Language: "+contentRequest.getFileLanguage());
         holder.minQuality.setText("Minimum Quality: "+contentRequest.getMinQuality());
         holder.requestUserFullName.setText(contentRequest.getRequestingUser());
+        holder.year.setText(contentRequest.getYear());
+
+//        Log.e("VITCC PEERS",contentRequest.getPeers().toString());
+
+
+
         holder.iHaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(),contentRequest.getKey(),Toast.LENGTH_SHORT).show();
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseUser user = mAuth.getCurrentUser();
+                view = v;
+                final String key = user.getEmail().toLowerCase().replace(".", ",").replace(" ", "");
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference ref = database.getReference("users");
+                ref.child(key).child("answered").child(contentRequest.getRequestType()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @SuppressLint("LongLogTag")
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.e("VITCC Answered Duplicate",dataSnapshot.toString());
+                        if (dataSnapshot.hasChild(contentRequest.getKey()))
+                        {
+                            Snackbar.make(view,"You have already responded to the request",Snackbar.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            showAlertDialog(contentRequest,key,view);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("VITCC ","Check answer duplicate routine cancelled");
+                    }
+                });
+
+
+
+
+
+
+
 
             }
         });
+
+
+
+
+
 
         holder.iNeedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +142,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
 
                         }
 
-                        handleEvent(subscribed,contentKey,requestType);
+                        handleEvent(subscribed,contentKey,requestType,contentRequest.getPeers());
 
                     }
 
@@ -107,14 +155,71 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
 
             }
         });
+
+
         new DownloadImageTask(holder.requestUserPic).execute(contentRequest.getRequestingUserPic());
 
 
     }
+    public void showAlertDialog(final ContentRequest contentRequest, final String key, final View view)
+    {
+        AlertDialog confirmResponse = new AlertDialog.Builder(context).setTitle("Heads up Buddy")
+                .setMessage("Are you sure you have this content with you?")
+                .setIcon(R.drawable.ic_alert_circle)
+                .setPositiveButton("Yes I Am", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-    private void handleEvent(boolean subscribed, final String contentKey, final String requestType) {
+                       FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference ref = database.getReference("requests");
+                        ref.child(contentRequest.getRequestType()).child(contentRequest.getKey()).child("answers").push().setValue(key, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if(databaseError == null) {
+                                    new GroupFCMSender((ArrayList<String>) contentRequest.getPeers(),contentRequest.getMovieName()).execute();
+                                    addtoAnswered(contentRequest.getRequestType(),contentRequest.getKey());
+                                    Snackbar.make(view, "Your response has been recorded. Cheers.", Snackbar.LENGTH_SHORT).show();
+//                                    showSnackBar(view);
+                                }
+                                else
+                                {
+                                    Log.e("VITCC","Error on adding response to a request");
+                                }
+                            }
+                        });
+
+
+
+                    }
+                }).setNegativeButton("No I dont",null).show();
+    }
+
+    private void addtoAnswered(String requestType, String key) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users");
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userKey = user.getEmail().toLowerCase().replace(".",",").replace(" ","");
+        ref.child(userKey).child("answered").child(requestType).child(key).setValue(true, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                Log.e("VITCC"," Added to answered self account");
+            }
+        });
+
+
+    }
+
+    private void showSnackBar(View view) {
+
+        Snackbar.make(view,"Users will be alerted regarding this",Snackbar.LENGTH_SHORT).show();
+    }
+
+
+    private void handleEvent(boolean subscribed, final String contentKey, final String requestType, final List<String> peers) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref;
+
         if (!subscribed) {
             ref = database.getReference("requests");
             ref.child(requestType).child(contentKey).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -135,8 +240,59 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
         }
         else
         {
-            Snackbar.make(view,"You have already subscribed to this alerts",Snackbar.LENGTH_SHORT).show();
+
+            final DatabaseReference reference = database.getReference("requests");
+            AlertDialog unsubscribe = new AlertDialog.Builder(context).setTitle("You have already subscribed to the alerts")
+                    .setIcon(R.drawable.ic_alert_circle)
+                    .setMessage("Do you want to unsubscribe?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            reference.child(requestType).child(contentKey).child("peers").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    List<String> latestPeers = (List<String>) dataSnapshot.getValue();
+                                    String token = FirebaseInstanceId.getInstance().getToken();
+//                                    Log.e("VITCC Unsubscribe", String.valueOf(latestPeers.size()));
+                                    if(latestPeers != null && latestPeers.size() > 0 && latestPeers.contains(token))
+                                    {
+                                        latestPeers.remove(token);
+                                    }
+                                    object.removePeer(token);
+
+                                    Log.e("VITCC Unsubscribe", String.valueOf(latestPeers.size()));
+                                    reference.child(requestType).child(contentKey).child("peers").setValue(latestPeers);
+                                    removeFromListening(requestType,contentKey);
+
+
+                                    Snackbar.make(view,"You have unsubscribed from the alerts",Snackbar.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.e("VITCC","Database error on unsubscribe");
+                                }
+                            });
+
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Snackbar.make(view,"You are still on the alerts",Snackbar.LENGTH_SHORT).show();
+                        }
+                    }).show();
+
         }
+    }
+
+    private void removeFromListening(String requestType, String contentKey) {
+
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String key = user.getEmail().toLowerCase().replace(".",",").replace(" ","");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users");
+        ref.child(key).child("listening").child(requestType).child(contentKey).setValue(null);
     }
 
     private void addNewPeer(ContentRequest request, final String requestCode, final String finalRequestTypeValue)
@@ -169,7 +325,6 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
         ref.child(key).child("listening").child(finalRequestTypeValue).child(requestCode).setValue(true);
 
     }
-
 
 
 

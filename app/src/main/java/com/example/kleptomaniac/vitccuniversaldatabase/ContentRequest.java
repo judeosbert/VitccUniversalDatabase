@@ -126,5 +126,14 @@ public class ContentRequest {
     {
         this.requestTime = requestTime;
     }
+    public void removePeer(String peer) {
+        if(this .peers.size() > 0 && this.peers.contains(peer))
+            this.peers.remove(peer);
+    }
+
+    public String getRequestingUserEmail()
+    {
+        return  this.requestingUser;
+    }
 
 }

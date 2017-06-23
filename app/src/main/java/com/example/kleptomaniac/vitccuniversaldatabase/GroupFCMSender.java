@@ -3,6 +3,7 @@ package com.example.kleptomaniac.vitccuniversaldatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,21 +13,23 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kleptomaniac on 17/6/17.
  */
 
-public class TopicMessageSender extends AsyncTask<String,String,String> {
+public class GroupFCMSender extends AsyncTask<String,String,String> {
     private String itemName;
-    private String topic;
+    private List<String> peers = new ArrayList<String>();
 
-    public TopicMessageSender() {
+    public GroupFCMSender () {
 
     }
 
-    public TopicMessageSender(String topic,String itemName) {
-        this.topic = topic;
+    public GroupFCMSender (ArrayList<String> peers , String itemName) {
+        this.peers = peers;
         this.itemName = itemName;
     }
 
@@ -55,13 +58,18 @@ public class TopicMessageSender extends AsyncTask<String,String,String> {
             JSONObject jsonObject  = new JSONObject();
             JSONObject notification = new JSONObject();
             JSONObject notificationBody = new JSONObject();
+            JSONArray registrationIds = new JSONArray();
             try {
-                notificationBody.put("title","New Request in "+topic+" category");
-                notificationBody.put("body","A new request has been made for "+itemName+". Do you have it or need it? Respond now.");
+                notificationBody.put("title","Response for your request");
+                notificationBody.put("body","A response for your request for "+itemName+" has been marked. Tap to see it now.");
                 notificationBody.put("sound","default");
                 notificationBody.put("icon","R.drawable.ic_checked");
                 jsonObject.put("notification",notificationBody);
-                jsonObject.put("to","/topics/"+topic);
+                for(int i = 0 ;i <peers.size();i++)
+                {
+                    registrationIds.put(peers.get(i));
+                }
+                jsonObject.put("registration_ids",registrationIds);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -78,7 +86,12 @@ public class TopicMessageSender extends AsyncTask<String,String,String> {
 
 
             int responseCode  = urlConnection.getResponseCode();
-            Log.e("VITCC TOPIC SENDER", String.valueOf(responseCode));
+            Log.e("VITCC GROUP SENDER", String.valueOf(responseCode));
+            Log.e("VITCC GROUP SENDER",urlConnection.getResponseMessage());
+            if(responseCode == 200)
+            {
+
+            }
 
 
         } catch (MalformedURLException e) {
