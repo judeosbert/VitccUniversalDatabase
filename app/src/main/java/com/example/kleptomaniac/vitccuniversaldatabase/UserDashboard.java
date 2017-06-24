@@ -111,17 +111,17 @@ public class UserDashboard extends AppCompatActivity {
                             showSubscribeButton("series");
                         }
                         break;
-                    case R.id.navigation_book:
-                        if (userClass.book || userClass.document) {
-                            showContent("d&b");
+                    case R.id.navigation_games:
+                        if (userClass.game) {
+                            showContent("game");
                             recyclerViewMusic.setVisibility(View.GONE);
                             recyclerViewMovie.setVisibility(View.GONE);
-                            recyclerViewDocument.setVisibility(View.VISIBLE);
+                            recyclerViewDocument.setVisibility(View.GONE);
                             recyclerViewSeries.setVisibility(View.GONE);
                             recyclerViewOther.setVisibility(View.GONE);
-                            recyclerViewGame.setVisibility(View.GONE);
+                            recyclerViewGame.setVisibility(View.VISIBLE);
                         } else {
-                            showSubscribeButton("d&b");
+                            showSubscribeButton("game");
                         }
                         break;
                     case R.id.navigation_settings:
@@ -159,16 +159,7 @@ public class UserDashboard extends AppCompatActivity {
 
 
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        ;
-        navigation.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                int id = v.getId();
 
-                Toast.makeText(getApplicationContext(),String.valueOf(id),Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Music");
@@ -254,10 +245,25 @@ public class UserDashboard extends AppCompatActivity {
         recyclerViewGame.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
         recyclerViewGame.setAdapter(contentAdapterGame);
 
+
+        //Demo
+
+        //
+
+
+
+
+
+
+
+
+
         
         bottomSheetDialog = new BottomSheetDialog(this);
         sheetView = this.getLayoutInflater().inflate(R.layout.activity_add_new_request,null);
         bottomSheetDialog.setContentView(sheetView);
+
+
 
         sheetView.findViewById(R.id.newRequestButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -356,6 +362,10 @@ public class UserDashboard extends AppCompatActivity {
                            } else if (finalCat == "other") {
                                requestListOther.add(0,contentRequest);
                            }
+                           else if(finalCat == "game")
+                           {
+                               requestListGame.add(0,contentRequest);
+                           }
                     if(finalCat == "music") {
 
                         listnerAdded.add(finalCat);
@@ -384,6 +394,11 @@ public class UserDashboard extends AppCompatActivity {
                         listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListOther);
                         contentAdapterOther.notifyDataSetChanged();
+                    }
+                    else if(finalCat == "game")
+                    {
+                        listnerAdded.add(finalCat);
+                        contentAdapterGame.notifyDataSetChanged();
                     }
                     hideNoActivity();
                 }
@@ -443,20 +458,31 @@ public class UserDashboard extends AppCompatActivity {
         recyclerViewOther.setVisibility(View.GONE);
         recyclerViewGame.setVisibility(View.GONE);
 
+        hideNoActivity();
+
 
         subNewCat = cat;
 
     }
+    private void hideSubscribeButton()
+    {
+        findViewById(R.id.imageView12).setVisibility(View.GONE);
+        findViewById(R.id.textView5).setVisibility(View.GONE);
+        findViewById(R.id.button5).setVisibility(View.GONE);
 
+    }
     public void subscribeTo(View view)
     {
-        String userKey = userData.getString("email", "").toLowerCase().replace(".", ",");
+        String userKey = user.getEmail().toLowerCase().replace(".", ",");
         if(subNewCat != "d&b")
         {
             DatabaseReference ref = database.getReference("users/"+userKey+"/"+subNewCat);
             ref.setValue(true);
 
         }
+        hideSubscribeButton();
+        retreiveData(subNewCat);
+
 
     }
 
@@ -571,7 +597,7 @@ public class UserDashboard extends AppCompatActivity {
     private void addToListening(String requestCode, String finalRequestTypeValue) {
         DatabaseReference ref = database.getReference("users");
         String key = user.getEmail().toLowerCase().replace(".",",").replace(" ","");
-        ref.child(key).child("listening").child(finalRequestTypeValue).child(requestCode).setValue(true);
+        ref.child(key).child("listening").child(requestCode).setValue(true);
 
     }
 

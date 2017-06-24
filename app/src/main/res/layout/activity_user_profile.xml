@@ -18,56 +18,41 @@
 
     <ImageView
         android:id="@+id/profileImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_below="@+id/toolbar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="1dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:adjustViewBounds="true"
         android:elevation="5dp"
-        app:srcCompat="@drawable/ic_user" />
+        app:srcCompat="@drawable/ic_user"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/fullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profileImage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
         android:text="Jude Osbert K"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fullName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:id="@+id/linearLayout">
+        android:layout_below="@+id/profileImage"
+        android:layout_marginTop="5dp"/>
 
-        <TextView
-            android:id="@+id/mobileNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="8113909239"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-        <TextView
-            android:id="@+id/roomNo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="819 A Block"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBar3"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
+        android:layout_below="@+id/fullName"
         android:layout_marginTop="10dp"
          />
+
+    <android.support.design.widget.TabLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/tabs"
+        app:tabMode="scrollable">
+        
+
+    </android.support.design.widget.TabLayout>
 
 </RelativeLayout>

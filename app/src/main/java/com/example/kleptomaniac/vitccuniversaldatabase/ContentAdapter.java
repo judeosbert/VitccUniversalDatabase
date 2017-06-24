@@ -28,6 +28,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -124,12 +125,12 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
                 view = v;
                 Log.e("VITCC", "I need it handler");
                 subscribed = false;
-                DatabaseReference ref = database.getReference("users/");
+                DatabaseReference ref = database.getReference("users");
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 FirebaseUser user = mAuth.getCurrentUser();
                 String key = user.getEmail().toLowerCase().replace(".", ",").replace(" ", "");
                 //We check if the user has already subscribed to this item for listening.
-                ref.child(key).child("listening").child(requestType).addListenerForSingleValueEvent(new ValueEventListener() {
+                ref.child(key).child("listening").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Log.e("VITCC LISTENING",dataSnapshot.toString());
@@ -172,12 +173,17 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
 
                        FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference ref = database.getReference("requests");
-                        ref.child(contentRequest.getRequestType()).child(contentRequest.getKey()).child("answers").push().setValue(key, new DatabaseReference.CompletionListener() {
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Date date = new Date();
+                        Answers answer = new Answers(contentRequest.getMovieName(),contentRequest.getRequestType(),contentRequest.getRequestTime(),date.toString(),user.getDisplayName(),user.getEmail().toLowerCase().replace(".",","),user.getPhotoUrl().toString(),contentRequest.getRequestingUser(),contentRequest.getRequestingUserPic(),contentRequest.getRequestingUser());
+                        final String pushKey = ref.child(contentRequest.getRequestType()).child(contentRequest.getKey()).child("answers").push().getKey();
+                        ref.child(contentRequest.getRequestType()).child(contentRequest.getKey()).child("answers").child(pushKey).setValue(answer, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 if(databaseError == null) {
                                     new GroupFCMSender((ArrayList<String>) contentRequest.getPeers(),contentRequest.getMovieName()).execute();
-                                    addtoAnswered(contentRequest.getRequestType(),contentRequest.getKey());
+                                    addtoAnswered(contentRequest.getRequestType(),contentRequest.getKey(),pushKey);
                                     Snackbar.make(view, "Your response has been recorded. Cheers.", Snackbar.LENGTH_SHORT).show();
 //                                    showSnackBar(view);
                                 }
@@ -194,13 +200,13 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
                 }).setNegativeButton("No I dont",null).show();
     }
 
-    private void addtoAnswered(String requestType, String key) {
+    private void addtoAnswered(String requestType, String key, String pushKey) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users");
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         String userKey = user.getEmail().toLowerCase().replace(".",",").replace(" ","");
-        ref.child(userKey).child("answered").child(requestType).child(key).setValue(true, new DatabaseReference.CompletionListener() {
+        ref.child(userKey).child("answered").child(requestType).child(key).setValue(pushKey, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 Log.e("VITCC"," Added to answered self account");
@@ -292,7 +298,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
         String key = user.getEmail().toLowerCase().replace(".",",").replace(" ","");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users");
-        ref.child(key).child("listening").child(requestType).child(contentKey).setValue(null);
+        ref.child(key).child("listening").child(contentKey).setValue(null);
     }
 
     private void addNewPeer(ContentRequest request, final String requestCode, final String finalRequestTypeValue)
@@ -322,7 +328,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
         }
         DatabaseReference ref = database.getReference("users");
         String key = user.getEmail().toLowerCase().replace(".",",").replace(" ","");
-        ref.child(key).child("listening").child(finalRequestTypeValue).child(requestCode).setValue(true);
+        ref.child(key).child("listening").child(requestCode).setValue(true);
 
     }
 

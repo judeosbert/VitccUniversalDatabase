@@ -21,7 +21,9 @@ public class CategoryChooserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentUser = mAuth.getCurrentUser();
         setContentView(R.layout.activity_category_chooser);
+
 
         musicBox = (CheckBox)findViewById(R.id.musicBox);
         movieBox = (CheckBox)findViewById(R.id.movieBox);
@@ -29,18 +31,20 @@ public class CategoryChooserActivity extends AppCompatActivity {
         gameBox = (CheckBox) findViewById(R.id.gamesBox);
         documentBox = (CheckBox) findViewById(R.id.documentBox);
         otherBox  = (CheckBox) findViewById(R.id.othersBox);
-        currentUser = mAuth.getCurrentUser();
+
 
 
 
     }
+
+
 
     public void next(View view)
     {
         SharedPreferences userData = getSharedPreferences("USERDATA",MODE_APPEND);
         String token = FirebaseInstanceId.getInstance().getToken();
         User user  =  new User(userData.getString("fullName",""),userData.getString("email",""),userData.getString("photoURL",""),token);
-        user.addTastes(musicBox.isChecked(),movieBox.isChecked(),seriesBox.isChecked(),gameBox.isChecked(),documentBox.isChecked(),otherBox.isChecked());
+        user.addTastes(musicBox.isChecked(),movieBox.isChecked(),seriesBox.isChecked(),gameBox.isChecked(),documentBox.isChecked(),otherBox.isChecked(),gameBox.isChecked());
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String key = userData.getString("email","").toLowerCase().replace(".",",");
         DatabaseReference ref  = database.getReference("users/"+key);

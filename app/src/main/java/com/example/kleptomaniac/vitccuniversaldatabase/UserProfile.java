@@ -41,8 +41,8 @@ public class UserProfile extends AppCompatActivity {
         new DownloadImageTask((ImageView) findViewById(R.id.profileImage)).execute(String.valueOf(user.getPhotoUrl()));
 
         fullName = (TextView) findViewById(R.id.fullName);
-        mobile = (TextView) findViewById(R.id.mobileNumber);
-        room   = (TextView) findViewById(R.id.roomNo);
+//        mobile = (TextView) findViewById(R.id.mobileNumber);
+//        room   = (TextView) findViewById(R.id.roomNo);
 
         getDataFromDatabase();
     }

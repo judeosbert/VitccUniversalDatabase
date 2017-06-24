@@ -17,9 +17,9 @@
         android:title="Series"/>
 
     <item
-        android:id="@+id/navigation_book"
-        android:icon="@drawable/ic_book"
-        android:title="Books and Documents"/>
+        android:id="@+id/navigation_games"
+        android:icon="@drawable/ic_games"
+        android:title="Games" />
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"

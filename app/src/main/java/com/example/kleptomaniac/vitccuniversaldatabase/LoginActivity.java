@@ -23,8 +23,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -159,14 +162,52 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         else {
             Toast.makeText(getApplicationContext(),"Welcome back "+user.getDisplayName(),Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this,UserDashboard.class));
+            finish();
         }
         }
 
 
     }
 
-    private void addUserToFirebaseDatabase(String fullName, String email, String photoURL) {
+    private void addUserToFirebaseDatabase(final String fullName, final String email, final String photoURL) {
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        final String key = currentUser.getEmail().toLowerCase().replace(".",",").replace(" ","");
+        FirebaseDatabase database  = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users");
+        final ProgressDialog progessDialog = new ProgressDialog(this);
+        progessDialog.setMessage("Hang on a second");
+        progessDialog.show();
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(key))
+                {
+                    Log.e("VITCC","Existing user. Proceed to Dashboard");
+                    progessDialog.hide();
+                    sendToDashboard();
+
+                }
+                else {
+                    addNewUser(fullName,email,photoURL);
+                    progessDialog.hide();
+                }
+
+            }
+
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+    }
+
+    private void addNewUser(String fullName, String email, String photoURL) {
         String messageToken  = FirebaseInstanceId.getInstance().getToken();
         User user = new User(fullName,email,photoURL,messageToken);
 
@@ -177,8 +218,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Intent intent = new Intent(this,CategoryChooserActivity.class);
         startActivity(intent);
         finish();
+    }
 
-
+    private void sendToDashboard() {
+        MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
+        myFirebaseInstanceIDService.sendRegistrationToServer();
+    startActivity(new Intent(this,UserDashboard.class));
     }
 
 

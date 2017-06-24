@@ -181,5 +181,8 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone"
         android:layout_marginTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textAlignment="center"
         android:text="There are no requests in this class. Be the first to add one."/>
 </RelativeLayout>
