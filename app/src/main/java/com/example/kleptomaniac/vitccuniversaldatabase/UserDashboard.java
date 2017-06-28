@@ -518,8 +518,14 @@ public class UserDashboard extends AppCompatActivity {
     }
 
     private void takeToUserProfile() {
-        startActivity(new Intent(this,UserProfile.class));
-        finish();
+        Intent intent = new Intent(this,UserProfile.class);
+        SharedPreferences sharedPreferences = getSharedPreferences("PROFILE_VISIT",MODE_APPEND);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("EMAIL",user.getEmail());
+//        editor.putString("EMAIL","judeosby@gmail.com");//Testing
+        editor.commit();
+        startActivity(intent);
+
     }
 
     public void dummy(View view)

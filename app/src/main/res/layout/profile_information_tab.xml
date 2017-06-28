@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/cardview_light_background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+    <ImageView
+
+        android:id="@+id/profileImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:srcCompat="@drawable/ic_user"
+        android:layout_above="@+id/tabs"
+        android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/userDisplayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:textColor="#000"
+            android:textSize="22dp"
+            android:layout_marginLeft="5dp"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:padding="5dp"
+        android:background="#eee"
+        android:layout_margin="15dp" />
+
+    <TextView
+        android:id="@+id/userPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_phone"
+        android:drawablePadding="10dp"
+        android:textColor="#000"
+        android:textSize="15dp"
+        android:clickable="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:padding="5dp"
+        android:background="#eee"
+        android:layout_margin="15dp" />
+
+    <TextView
+        android:id="@+id/userEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_mail"
+        android:drawablePadding="10dp"
+        android:textColor="#000"
+        android:textSize="15dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:padding="5dp"
+        android:background="#eee"
+        android:layout_margin="15dp" />
+
+    <TextView
+        android:id="@+id/userLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@drawable/ic_map_pin"
+        android:drawablePadding="10dp"
+        android:textColor="#000"
+        android:textSize="15dp"
+        android:clickable="true"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:padding="5dp"
+        android:background="#eee"
+        android:layout_margin="15dp" />
+
+    <Button
+        android:id="@+id/signOutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/common_google_signin_btn_text_dark"
+        android:text="Sign Out"
+
+        android:textAllCaps="false"
+        android:textColor="#fff" />
+</LinearLayout>

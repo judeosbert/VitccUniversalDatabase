@@ -16,43 +16,23 @@
 
                 />
 
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:adjustViewBounds="true"
-        android:elevation="5dp"
-        app:srcCompat="@drawable/ic_user"
-        android:layout_below="@+id/toolbar"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/fullName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Jude Osbert K"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/profileImage"
-        android:layout_marginTop="5dp"/>
-
-
-    <ProgressBar
-        android:id="@+id/progressBar3"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fullName"
-        android:layout_marginTop="10dp"
-         />
-
     <android.support.design.widget.TabLayout
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:id="@+id/tabs"
-        app:tabMode="scrollable">
-        
+        app:tabMode="scrollable"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/toolbar"
 
-    </android.support.design.widget.TabLayout>
+        />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:layout_below="@id/tabs"
+            />
+
 
 </RelativeLayout>

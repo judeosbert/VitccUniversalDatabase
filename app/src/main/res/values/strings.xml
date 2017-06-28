@@ -41,5 +41,13 @@
         <item>Other Indian Language</item>
         <item>Foreign Language</item>
     </string-array>
+
+    <string-array name="blocks">
+        <item>A</item>
+        <item>B - Boys Hostel</item>
+        <item>B - Girls Hostel</item>
+        <item>C</item>
+        <item>Day Scholer</item>
+    </string-array>
     <string name="title_activity_user_profile">UserProfile</string>
 </resources>

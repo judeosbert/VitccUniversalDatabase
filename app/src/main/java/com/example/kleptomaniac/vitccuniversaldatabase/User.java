@@ -37,6 +37,11 @@ public class User {
 
     }
 
+    public User(User user) {
+        user.mobileNumber = this.mobileNumber;
+
+    }
+
 
     public void addTastes(boolean checked, boolean checked1, boolean checked2, boolean checked3, boolean checked4, boolean checked5,boolean game) {
         this.music =checked;
