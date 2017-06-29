@@ -153,6 +153,9 @@ public class ProfileInformationTab extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+//                // TODO: 29/6/17  Unsubscribe user from all category topics other than topic info
+
+
                 Intent intent = new Intent(v.getContext(),LoginActivity.class);
                 v.getContext().startActivity(intent);
             }
@@ -326,6 +329,7 @@ public class ProfileInformationTab extends Fragment {
                     Log.e("VITCC PROFILE","Comparison false");
                     mobileSheetView.findViewById(R.id.newMobileSection).setVisibility(GONE);
                     mobileSheetView.findViewById(R.id.callMobile).setVisibility(View.VISIBLE);
+                    signOutButton.setVisibility(GONE);
                     //Section for visiting profile
 
                     if(phone.length() == 0)

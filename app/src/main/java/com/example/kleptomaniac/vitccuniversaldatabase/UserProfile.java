@@ -8,7 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,8 +18,7 @@ public class UserProfile extends AppCompatActivity implements TabLayout.OnTabSel
     public FirebaseAuth mAuth;
     public FirebaseUser user;
     public FirebaseDatabase database;
-    public TextView userDisplayName,userEmail,userPhone,userLocation;
-
+    private String currentUserEmail;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     @Override
@@ -29,6 +28,8 @@ public class UserProfile extends AppCompatActivity implements TabLayout.OnTabSel
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -45,12 +46,11 @@ public class UserProfile extends AppCompatActivity implements TabLayout.OnTabSel
         tabLayout.setupWithViewPager(viewPager);
 
 
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
+
         database = FirebaseDatabase.getInstance();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SharedPreferences sharedPreferences = this.getSharedPreferences("PROFILE_VISIT", Context.MODE_APPEND);
-        String currentUserEmail = sharedPreferences.getString("EMAIL","");
+        currentUserEmail = sharedPreferences.getString("EMAIL","");
         String[] userName = currentUserEmail.split("@");
         getSupportActionBar().setTitle(userName[0]);
 
@@ -59,8 +59,18 @@ public class UserProfile extends AppCompatActivity implements TabLayout.OnTabSel
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        Log.e("VITCC","Profile Tab On Selected"+tab.getPosition());
-        viewPager.setCurrentItem(tab.getPosition());
+        SharedPreferences sharedPreferences = this.getSharedPreferences("PROFILE_VISIT", Context.MODE_APPEND);
+        currentUserEmail = sharedPreferences.getString("EMAIL","");
+        Log.e("VITCC","Profile Tab On Selected"+tab.getPosition()+"CURRENT USER "+user.getDisplayName());
+        Log.e("VITCC ","Current User"+currentUserEmail);
+        if(!currentUserEmail.equals(user.getEmail()))
+        {
+            viewPager.setCurrentItem(0);
+            Toast.makeText(getApplicationContext(),"That doesn't concern you",Toast.LENGTH_SHORT).show();
+        }
+        else
+            viewPager.setCurrentItem(tab.getPosition());
+
 
     }
 

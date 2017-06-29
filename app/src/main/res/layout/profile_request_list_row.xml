@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:clickable="true"
+    android:background="?android:attr/selectableItemBackground"
+   >
+
+
+    <ImageView
+        android:id="@+id/requestUserPic"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/ic_user" />
+
+    <TextView
+        android:id="@+id/requestUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_alignBottom="@+id/requestUserPic"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/requestUserPic"
+        android:text="Display Name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+    <TextView
+        android:id="@+id/requestMovieName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/requestUserPic"
+        android:layout_marginTop="24dp"
+        android:text="Movie Name Complete"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+    <TextView
+        android:id="@+id/requestMovieYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Year"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_alignBaseline="@+id/requestMovieName"
+        android:layout_alignBottom="@+id/requestMovieName"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/requestTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3 days ago"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:layout_below="@+id/requestMovieName"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/requestTime"
+        android:layout_marginTop="8dp"
+        android:id="@+id/firstLinearLayout"
+        >
+
+        <TextView
+            android:id="@+id/requestMinQuality"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Minimum Quality : 720p"
+
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+        <TextView
+            android:id="@+id/requestFileLanguage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Language : Malayalam"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/firstLinearLayout"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/viewResponsesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#028482"
+            android:drawableLeft="@drawable/ic_check_white"
+            android:drawablePadding="10dp"
+            android:elevation="4dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="20dp"
+            android:text="Responses"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+
+            />
+        <!--todo change the icons from check to eye and bell to trash-->
+
+
+        <Button
+            android:id="@+id/removeRequestButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@color/colorPrimary"
+            android:drawableLeft="@drawable/ic_bell_white"
+            android:drawablePadding="10dp"
+            android:elevation="4dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="Remove"
+            android:textAllCaps="false"
+            android:textColor="#fff" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:drawableRight="@drawable/ic_more_vertical"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:textAlignment="center" />
+
+</RelativeLayout>

@@ -329,6 +329,8 @@ public class UserDashboard extends AppCompatActivity {
         try {
 
             if (listnerAdded.contains(cat)) {
+                String capCat = cat.substring(0,1).toUpperCase()+cat.substring(1);
+                getSupportActionBar().setTitle(capCat);
                 hideNoActivity();
                 return;
             }
@@ -338,8 +340,7 @@ public class UserDashboard extends AppCompatActivity {
             Log.e("VITCC","No data in listnerAdded array");
         }
         final String finalCat = cat;
-        String capCat = finalCat.substring(0,1).toUpperCase()+finalCat.substring(1);
-        getSupportActionBar().setTitle(capCat);
+
 
             DatabaseReference ref = database.getReference("requests");
             ref.child(cat).addChildEventListener(new ChildEventListener() {
@@ -369,37 +370,40 @@ public class UserDashboard extends AppCompatActivity {
                     if(finalCat == "music") {
 
                         listnerAdded.add(finalCat);
-                        contentAdapterMusic.notifyDataSetChanged();
+                        contentAdapterMusic.notifyItemInserted(0);
+//                        contentAdapterMusic.notifyDataSetChanged();
                     }
                     else if(finalCat == "movie") {
 
                         listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListMovie);
-                        contentAdapterMovie.notifyDataSetChanged();
+                        contentAdapterMovie.notifyItemInserted(0);
                     }
                     else if(finalCat == "series") {
 
                         listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListSeries);
-                        contentAdapterSeries.notifyDataSetChanged();
+                        contentAdapterSeries.notifyItemInserted(0);
                     }
                     else if(finalCat == "document") {
 
                         listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListDocument);
-                        contentAdapterDocument.notifyDataSetChanged();
+                        contentAdapterDocument.notifyItemInserted(0);
                     }
                     else if(finalCat == "other") {
 
                         listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListOther);
-                        contentAdapterOther.notifyDataSetChanged();
+                        contentAdapterOther.notifyItemInserted(0);
                     }
                     else if(finalCat == "game")
                     {
                         listnerAdded.add(finalCat);
-                        contentAdapterGame.notifyDataSetChanged();
+                        contentAdapterGame.notifyItemInserted(0);
                     }
+                    String capCat = finalCat.substring(0,1).toUpperCase()+finalCat.substring(1);
+                    getSupportActionBar().setTitle(capCat);
                     hideNoActivity();
                 }
 
@@ -522,7 +526,7 @@ public class UserDashboard extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("PROFILE_VISIT",MODE_APPEND);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("EMAIL",user.getEmail());
-//        editor.putString("EMAIL","judeosby@gmail.com");//Testing
+//        editor.putString("EMAIL","bridgitom@gmail.com");//Testing
         editor.commit();
         startActivity(intent);
 
