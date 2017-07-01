@@ -57,6 +57,7 @@ public class UserDashboard extends AppCompatActivity {
     private String reqType = null,itemNameString = null;
     private List<String> listnerAdded = new ArrayList<>();
 
+
 //    SharedPreferences latestPulls = getSharedPreferences("LATESTDATA",MODE_APPEND);
 //    SharedPreferences.Editor edit = latestPulls.edit();
 
@@ -178,7 +179,7 @@ public class UserDashboard extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 userClass = dataSnapshot.getValue(User.class);
-                Log.e("VITCC", String.valueOf(userClass.music));
+                //Log.e("VITCC", String.valueOf(userClass.music));
                 findViewById(R.id.loadingBar).setVisibility(View.GONE);
 //                    progressDialog.hide();
 
@@ -292,16 +293,10 @@ public class UserDashboard extends AppCompatActivity {
 //                Log.e("VITCC",itemNameValue);
                 String yearValue = year.getText().toString();
 
-                if(yearValue.length() == 0)
-                {
-                    year.setError("Dont know even this?");
-                    return;
-                }
 
-                if(yearValue.length() != 4 || yearValue.matches("/[0-9]{4}"))
+                if(yearValue.length() != 4 || !yearValue.matches("/[0-9]{4}"))
                 {
-                    year.setError("Set a proper value for this");
-                    return;
+                    yearValue = "";
 
                 }
                 itemName.setText("");
@@ -320,6 +315,9 @@ public class UserDashboard extends AppCompatActivity {
 
 
     private void retreiveData(String cat) {
+        int insertIndex = 0;
+        String capCat = cat.substring(0,1).toUpperCase()+cat.substring(1);
+        getSupportActionBar().setTitle(capCat);
         if(findViewById(R.id.loadingBar).getVisibility() == View.GONE)
             showNoActivity();
         if(cat == "d&b")
@@ -329,9 +327,9 @@ public class UserDashboard extends AppCompatActivity {
         try {
 
             if (listnerAdded.contains(cat)) {
-                String capCat = cat.substring(0,1).toUpperCase()+cat.substring(1);
-                getSupportActionBar().setTitle(capCat);
+
                 hideNoActivity();
+                insertIndex = 0;
                 return;
             }
         }
@@ -351,9 +349,10 @@ public class UserDashboard extends AppCompatActivity {
                     Log.e("VITCC Child Listener",dataSnapshot.getValue().toString());
                     ContentRequest contentRequest = dataSnapshot.getValue(ContentRequest.class);
 
+
+
                            if (finalCat == "music")
                                requestListMusic.add(0,contentRequest);
-
                            else if (finalCat == "movie")
                                requestListMovie.add(0,contentRequest);
                            else if (finalCat == "series")
@@ -369,42 +368,43 @@ public class UserDashboard extends AppCompatActivity {
                            }
                     if(finalCat == "music") {
 
-                        listnerAdded.add(finalCat);
+//                        listnerAdded.add(finalCat);
                         contentAdapterMusic.notifyItemInserted(0);
 //                        contentAdapterMusic.notifyDataSetChanged();
                     }
                     else if(finalCat == "movie") {
 
-                        listnerAdded.add(finalCat);
+//                        listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListMovie);
                         contentAdapterMovie.notifyItemInserted(0);
                     }
                     else if(finalCat == "series") {
 
-                        listnerAdded.add(finalCat);
+//                        listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListSeries);
                         contentAdapterSeries.notifyItemInserted(0);
                     }
                     else if(finalCat == "document") {
 
-                        listnerAdded.add(finalCat);
+//                        listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListDocument);
                         contentAdapterDocument.notifyItemInserted(0);
                     }
                     else if(finalCat == "other") {
 
-                        listnerAdded.add(finalCat);
+//                        listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListOther);
                         contentAdapterOther.notifyItemInserted(0);
                     }
                     else if(finalCat == "game")
                     {
-                        listnerAdded.add(finalCat);
+//                        listnerAdded.add(finalCat);
                         contentAdapterGame.notifyItemInserted(0);
                     }
-                    String capCat = finalCat.substring(0,1).toUpperCase()+finalCat.substring(1);
-                    getSupportActionBar().setTitle(capCat);
+
+
                     hideNoActivity();
+                    Log.e("VITCC","Listner added"+listnerAdded.toString());
                 }
 
                 @Override
@@ -581,6 +581,7 @@ public class UserDashboard extends AppCompatActivity {
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 sendNotification(reqType,itemNameString);
                                 showSnackBar("Your request has been added");
+//                                addToOwnerShip(requestCode,finalRequestTypeValue);
                             }
                         });
                     }
@@ -602,6 +603,12 @@ public class UserDashboard extends AppCompatActivity {
 
 
 
+    }
+
+    private void addToOwnerShip(String requestCode, String finalRequestTypeValue) {
+        DatabaseReference ref = database.getReference("users");
+        String key = user.getEmail().toLowerCase().replace(".",",").replace(" ","");
+        ref.child(key).child("owner").child(requestCode).setValue(true);
     }
 
     private void addToListening(String requestCode, String finalRequestTypeValue) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,6 +68,23 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
         holder.minQuality.setText("Minimum Quality: "+contentRequest.getMinQuality());
         holder.requestUserFullName.setText(contentRequest.getRequestingUser());
         holder.year.setText(contentRequest.getYear());
+        Date currentDate = new Date();
+        Date requestDate = new Date(contentRequest.getRequestTime());
+
+        long diff = currentDate.getTime() - requestDate.getTime();
+        long days = diff / 1000/60/60/24;
+        if(days<3 && days >= 0)
+        {
+            
+           holder.movieName.setTypeface(null, Typeface.BOLD);
+//            holder.fileType.setTypeface(null, Typeface.BOLD);
+//            holder.minQuality.setTypeface(null, Typeface.BOLD);
+//            holder.requestUserFullName.setTypeface(null, Typeface.BOLD);
+        }
+        if(days == 0)
+            holder.requestTime.setText("Today");
+        else
+            holder.requestTime.setText(days +" days ago");
 
 //        Log.e("VITCC PEERS",contentRequest.getPeers().toString());
 
@@ -370,6 +389,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
         public TextView requestUserFullName,movieName,year,minQuality,fileType,requestTime;
         public ImageView requestUserPic;
         public Button iHaveButton,iNeedButton;
+        public RelativeLayout requestRow;
 
         public MyViewHolder(View view) {
             super(view);
@@ -377,12 +397,12 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
             requestUserFullName = (TextView) view.findViewById(R.id.requestUserName);
             movieName  = (TextView) view.findViewById(R.id.requestMovieName);
             year = (TextView) view.findViewById(R.id.requestMovieYear);
-            requestTime = (TextView) view.findViewById(R.id.requestMovieYear);
+            requestTime = (TextView) view.findViewById(R.id.requestTime);
             minQuality = (TextView) view.findViewById(R.id.requestMinQuality);
             fileType = (TextView) view.findViewById(R.id.requestFileType);
             iHaveButton = (Button) view.findViewById(R.id.iHaveButton);
             iNeedButton = (Button) view.findViewById(R.id.iNeedButton);
-
+            requestRow = (RelativeLayout) view.findViewById(R.id.requestRowLayout);
 
 
 

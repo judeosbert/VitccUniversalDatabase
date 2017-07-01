@@ -13,8 +13,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
+
+import static android.view.View.GONE;
 
 /**
  * Created by kleptomaniac on 29/6/17.
@@ -42,7 +54,7 @@ public class ProfileRequestsAdapter extends RecyclerView.Adapter<ProfileRequests
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         final ContentRequest contentRequest = requestList.get(position);
         object = new ContentRequest(contentRequest);
@@ -51,10 +63,104 @@ public class ProfileRequestsAdapter extends RecyclerView.Adapter<ProfileRequests
         holder.minQuality.setText("Minimum Quality: "+contentRequest.getMinQuality());
         holder.requestUserFullName.setText(contentRequest.getRequestingUser());
         holder.year.setText(contentRequest.getYear());
+        Date currentDate = new Date();
+        Date requestDate = new Date(contentRequest.getRequestTime());
+
+        long diff = currentDate.getTime() - requestDate.getTime();
+        long days = diff / 1000/60/60/24;
+
+        if(days == 0)
+            holder.requestTime.setText("Today");
+        else
+            holder.requestTime.setText(days +" days ago");
+
+
         new DownloadImageTask(holder.requestUserPic).execute(contentRequest.getRequestingUserPic());
+
+        holder.removeRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String contentKey = contentRequest.getKey();
+
+                /*
+                Remove a request means
+                1) Remove from the listening field
+                2)Remove from the requests according to
+                    a) If the no of peers == 1 and he is the only peer set the contekey value to null
+                    b)If there are other peers to it remove this peer only
+                Due to some it aint working so what we will do is to try set the whole path as null and put in a try catch. and set listening.
+
+                 */
+
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                FirebaseUser user = mAuth.getCurrentUser();
+
+                String userKey = user.getEmail().toLowerCase().replace(".",",");
+                final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                final DatabaseReference ref = database.getReference("users");
+                ref.child(userKey).child("listening").child(contentRequest.getKey()).setValue(null);
+
+
+                final String contentType = classify(contentRequest.getKey());
+
+                final DatabaseReference reference  = database.getReference("requests");
+                reference.child(contentType).child(contentKey).child("peers").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<String> latestPeers = (List<String>) dataSnapshot.getValue();
+                        String token = FirebaseInstanceId.getInstance().getToken();
+//                                    Log.e("VITCC Unsubscribe", String.valueOf(latestPeers.size()));
+                        if(latestPeers != null && latestPeers.size() > 0 && latestPeers.contains(token))
+                        {
+                            latestPeers.remove(token);
+                        }
+                        object.removePeer(token);
+
+                        Log.e("VITCC Unsubscribe", String.valueOf(latestPeers.size()));
+                        if(latestPeers.size() == 0)
+                        {
+                            reference.child(contentType).child(contentKey).setValue(null);
+                        }
+                        else
+                            reference.child(contentType).child(contentKey).child("peers").setValue(latestPeers);
+
+                        holder.year.setText("");
+                        holder.requestUserFullName.setVisibility(GONE);
+                        holder.removeRequestButton.setVisibility(GONE);
+                        holder.viewResponsesButton.setVisibility(GONE);
+                        holder.requestUserPic.setVisibility(GONE);
+                        holder.movieName.setText("Request Removed");
+                        holder.requestTime.setVisibility(GONE);
+                        holder.fileType.setVisibility(GONE);
+                        holder.minQuality.setVisibility(GONE);
+
+
+
+                        }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
+
+
 
     }
 
+    private String classify(String contentKey) {
+        String[] categories = new String[]{"music","movie","series","game","document","other"};
+        for(String cat:categories)
+        {
+            if(contentKey.contains(cat))
+                return cat;
+        }
+        return null;
+    }
     @Override
     public int getItemCount() {
         return requestList.size();
@@ -70,7 +176,7 @@ public class ProfileRequestsAdapter extends RecyclerView.Adapter<ProfileRequests
             requestUserFullName = (TextView) view.findViewById(R.id.requestUserName);
             movieName  = (TextView) view.findViewById(R.id.requestMovieName);
             year = (TextView) view.findViewById(R.id.requestMovieYear);
-            requestTime = (TextView) view.findViewById(R.id.requestMovieYear);
+            requestTime = (TextView) view.findViewById(R.id.requestTime);
             minQuality = (TextView) view.findViewById(R.id.requestMinQuality);
             fileType = (TextView) view.findViewById(R.id.requestFileLanguage);
             viewResponsesButton = (Button) view.findViewById(R.id.viewResponsesButton);

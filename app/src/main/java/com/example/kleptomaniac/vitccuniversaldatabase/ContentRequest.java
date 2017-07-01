@@ -35,6 +35,37 @@ public class ContentRequest {
         this.requestingUserFullName = requestingUserFullName;
 
     }
+    public ContentRequest(String key,String requestType,String requestingUser,String requestingUserFullName, String RequestingUserPic, String movieName, String year, String minQuality, String fileType,List<String> peers,String requestTime)
+    {
+        this.requestType = requestType;
+        this.requestingUser = requestingUser;
+        this.RequestingUserPic = RequestingUserPic;
+        this.movieName = movieName;
+        this.year = year;
+        this.minQuality = minQuality;
+        this.fileLanguage = fileType;
+        this.requestTime = requestTime;
+        this.peers = peers;
+        this.key = key;
+        this.requestingUserFullName = requestingUserFullName;
+
+    }
+    public ContentRequest(String key,String requestType,String requestingUser,String requestingUserFullName, String RequestingUserPic, String movieName, String year, String minQuality, String fileType)
+    {
+        this.requestType = requestType;
+        this.requestingUser = requestingUser;
+        this.RequestingUserPic = RequestingUserPic;
+        this.movieName = movieName;
+        this.year = year;
+        this.minQuality = minQuality;
+        this.fileLanguage = fileType;
+        Date date = new Date();
+        this.requestTime = date.toString();
+
+        this.key = key;
+        this.requestingUserFullName = requestingUserFullName;
+
+    }
 
 
     public ContentRequest(ContentRequest copy)
@@ -130,7 +161,14 @@ public class ContentRequest {
         if(this .peers.size() > 0 && this.peers.contains(peer))
             this.peers.remove(peer);
     }
-
+    public void addPeers(List<String> peers)
+    {
+        this.peers  = peers;
+    }
+    public int getPeerCount()
+    {
+        return this.peers.size();
+    }
     public String getRequestingUserEmail()
     {
         return  this.requestingUser;

@@ -9,6 +9,7 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:clickable="true"
+    android:id="@+id/requestRowLayout"
     android:background="?android:attr/selectableItemBackground"
    >
 
@@ -133,12 +134,14 @@
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
         android:background="@null"
         android:drawableRight="@drawable/ic_more_vertical"
         android:gravity="center"
         android:paddingLeft="10dp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:layout_alignBaseline="@+id/requestUserName"
+        android:layout_alignBottom="@+id/requestUserName"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

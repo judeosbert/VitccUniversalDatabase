@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#028482"
-            android:drawableLeft="@drawable/ic_check_white"
+            android:drawableLeft="@drawable/ic_eye"
             android:drawablePadding="10dp"
             android:elevation="4dp"
             android:paddingLeft="30dp"
@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="@color/colorPrimary"
-            android:drawableLeft="@drawable/ic_bell_white"
+            android:drawableLeft="@drawable/ic_trash"
             android:drawablePadding="10dp"
             android:elevation="4dp"
             android:paddingLeft="30dp"
@@ -141,6 +141,7 @@
         android:drawableRight="@drawable/ic_more_vertical"
         android:gravity="center"
         android:paddingLeft="10dp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:visibility="gone"/>
 
 </RelativeLayout>
