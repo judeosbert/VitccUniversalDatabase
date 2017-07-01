@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="10dp"
+
+    android:paddingBottom="15dp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/requestUserPic"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/ic_user" />
+
+    <TextView
+        android:id="@+id/requestUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/requestUserPic"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+
+        android:layout_toEndOf="@+id/requestUserPic"
+        android:text="Display Name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/responseTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="10dp"
+        android:text="Responded Today" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        >
+
+    <Button
+        android:id="@+id/viewProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#028482"
+        android:padding="10dp"
+        android:drawableLeft="@drawable/ic_user_white"
+        android:drawablePadding="10dp"
+        android:text="View Profile"
+        android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/verifyResponse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimaryDark"
+            android:text="Verify Response"
+            android:layout_marginLeft="20dp"
+            android:drawableLeft="@drawable/ic_check_white"
+            android:drawablePadding="10dp"
+            android:textColor="#fff"
+            android:padding="10dp"/>
+
+        </LinearLayout>
+</LinearLayout>

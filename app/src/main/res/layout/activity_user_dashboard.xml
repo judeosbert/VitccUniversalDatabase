@@ -25,7 +25,7 @@
 
 
 
-            <android.support.v7.widget.RecyclerView
+            <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="?attr/actionBarSize"
@@ -34,7 +34,11 @@
                 android:paddingBottom="?attr/actionBarSize"
                 android:clipToPadding="false"
                 android:visibility="visible"
+                app:fastScrollPopupBgColor="@color/colorPrimary"
+                app:fastScrollPopupTextColor="#fff"
+                app:fastScrollThumbColor="@color/colorAccent"
                 />
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -105,7 +105,6 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/textView9"
         android:layout_below="@+id/textView9"
-        android:entries="@array/minQuality"
         android:layout_marginTop="5dp"/>
 
     <Button

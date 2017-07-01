@@ -336,7 +336,8 @@ public class ProfileInformationTab extends Fragment {
                     {
                         userPhone.setText("No Phone number given");
                         userPhone.setClickable(false);
-                        userPhone.setTextColor(Color.BLUE);
+                        userPhone.setTextColor(Color.BLACK);
+                        userPhone.setEnabled(false);
 
                     }
                     else {

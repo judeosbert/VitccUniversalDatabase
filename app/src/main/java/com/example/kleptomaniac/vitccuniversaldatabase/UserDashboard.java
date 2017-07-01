@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -56,6 +58,9 @@ public class UserDashboard extends AppCompatActivity {
     private Boolean resuming = false,duplicate = false;
     private String reqType = null,itemNameString = null;
     private List<String> listnerAdded = new ArrayList<>();
+    Spinner requestType,fileLanguage,fileQuality;
+    EditText itemName,year;
+    int bottomSelectedIndex;
 
 
 //    SharedPreferences latestPulls = getSharedPreferences("LATESTDATA",MODE_APPEND);
@@ -71,6 +76,7 @@ public class UserDashboard extends AppCompatActivity {
             try {
                 switch (item.getItemId()) {
                     case R.id.navigation_music:
+                        bottomSelectedIndex= 0;
                         if (userClass.music) {
                             showContent("music");
 
@@ -86,6 +92,7 @@ public class UserDashboard extends AppCompatActivity {
                         }
                         break;
                     case R.id.navigation_movies:
+                        bottomSelectedIndex= 1;
                         if (userClass.movie) {
                             showContent("movie");
 
@@ -100,6 +107,7 @@ public class UserDashboard extends AppCompatActivity {
                         }
                         break;
                     case R.id.navigation_series:
+                        bottomSelectedIndex = 2;
                         if (userClass.series) {
                             showContent("series");
                             recyclerViewMusic.setVisibility(View.GONE);
@@ -113,6 +121,7 @@ public class UserDashboard extends AppCompatActivity {
                         }
                         break;
                     case R.id.navigation_games:
+                        bottomSelectedIndex = 3;
                         if (userClass.game) {
                             showContent("game");
                             recyclerViewMusic.setVisibility(View.GONE);
@@ -126,6 +135,7 @@ public class UserDashboard extends AppCompatActivity {
                         }
                         break;
                     case R.id.navigation_settings:
+                        bottomSelectedIndex = 4;
                         if (userClass.other) {
                             showContent("other");
                             recyclerViewMusic.setVisibility(View.GONE);
@@ -264,21 +274,50 @@ public class UserDashboard extends AppCompatActivity {
         sheetView = this.getLayoutInflater().inflate(R.layout.activity_add_new_request,null);
         bottomSheetDialog.setContentView(sheetView);
 
+        requestType = (Spinner) sheetView.findViewById(R.id.requestTypes);
+        fileLanguage = (Spinner) sheetView.findViewById(R.id.requestFileType);
+        fileQuality = (Spinner) sheetView.findViewById(R.id.minQualityExpected);
+//        Log.e("VITCC",requestTypeValue);
+        requestType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String[] videoValues = new String[]{"Any","Cam Print","240p","360p","480p","720p","1080p","Blu-Ray"};
+                String[] generalValues = new String[]{"Not Applicable"};
+
+
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                Log.e("VITCC","Spinner"+selectedItem);
+                if(selectedItem.equals("Movie") || selectedItem.equals("Series"))
+                {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(sheetView.getContext(),android.R.layout.simple_spinner_dropdown_item,videoValues);
+                    fileQuality.setAdapter(adapter);
+                }
+                else
+                {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(sheetView.getContext(),android.R.layout.simple_spinner_item,generalValues);
+                    fileQuality.setAdapter(adapter);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+                itemName = (EditText) sheetView.findViewById(R.id.itemName);
+        year = (EditText) sheetView.findViewById(R.id.releaseYear);
+
 
 
         sheetView.findViewById(R.id.newRequestButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Spinner requestType,fileLanguage,fileQuality;
-                EditText itemName,year;
 
-                requestType = (Spinner) sheetView.findViewById(R.id.requestTypes);
-                fileLanguage = (Spinner) sheetView.findViewById(R.id.requestFileType);
-                fileQuality = (Spinner) sheetView.findViewById(R.id.minQualityExpected);
-//        Log.e("VITCC",requestTypeValue);
-                itemName = (EditText) sheetView.findViewById(R.id.itemName);
-                year = (EditText) sheetView.findViewById(R.id.releaseYear);
+
+
+
 
                 String requestTypeValue=requestType.getSelectedItem().toString();
                 String fileQualityValue=fileQuality.getSelectedItem().toString();
@@ -341,7 +380,8 @@ public class UserDashboard extends AppCompatActivity {
 
 
             DatabaseReference ref = database.getReference("requests");
-            ref.child(cat).addChildEventListener(new ChildEventListener() {
+
+        ref.child(cat).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -368,37 +408,37 @@ public class UserDashboard extends AppCompatActivity {
                            }
                     if(finalCat == "music") {
 
-//                        listnerAdded.add(finalCat);
+                        listnerAdded.add(finalCat);
                         contentAdapterMusic.notifyItemInserted(0);
 //                        contentAdapterMusic.notifyDataSetChanged();
                     }
                     else if(finalCat == "movie") {
 
-//                        listnerAdded.add(finalCat);
+                        listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListMovie);
                         contentAdapterMovie.notifyItemInserted(0);
                     }
                     else if(finalCat == "series") {
 
-//                        listnerAdded.add(finalCat);
+                        listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListSeries);
                         contentAdapterSeries.notifyItemInserted(0);
                     }
                     else if(finalCat == "document") {
 
-//                        listnerAdded.add(finalCat);
+                        listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListDocument);
                         contentAdapterDocument.notifyItemInserted(0);
                     }
                     else if(finalCat == "other") {
 
-//                        listnerAdded.add(finalCat);
+                        listnerAdded.add(finalCat);
 //                        Collections.reverse(requestListOther);
                         contentAdapterOther.notifyItemInserted(0);
                     }
                     else if(finalCat == "game")
                     {
-//                        listnerAdded.add(finalCat);
+                        listnerAdded.add(finalCat);
                         contentAdapterGame.notifyItemInserted(0);
                     }
 
@@ -542,6 +582,7 @@ public class UserDashboard extends AppCompatActivity {
 
         bottomSheetDialog.show();
 
+
     }
 
     public void databaseAdder(String requestTypeValue, final String itemNameValue, String yearValue, String fileLanguageValue, String fileQualityValue)
@@ -673,6 +714,8 @@ public class UserDashboard extends AppCompatActivity {
         findViewById(R.id.noActivityText).setVisibility(View.VISIBLE);
 
     }
+
+
 
 
 

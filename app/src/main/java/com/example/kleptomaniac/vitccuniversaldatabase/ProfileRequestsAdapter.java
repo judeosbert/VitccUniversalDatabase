@@ -1,6 +1,7 @@
 package com.example.kleptomaniac.vitccuniversaldatabase;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -107,6 +108,7 @@ public class ProfileRequestsAdapter extends RecyclerView.Adapter<ProfileRequests
                 reference.child(contentType).child(contentKey).child("peers").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
                         List<String> latestPeers = (List<String>) dataSnapshot.getValue();
                         String token = FirebaseInstanceId.getInstance().getToken();
 //                                    Log.e("VITCC Unsubscribe", String.valueOf(latestPeers.size()));
@@ -148,6 +150,14 @@ public class ProfileRequestsAdapter extends RecyclerView.Adapter<ProfileRequests
             }
         });
 
+        holder.viewResponsesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(),ViewResponses.class);
+                intent.putExtra("CONTENTKEY",contentRequest.getKey());
+                v.getContext().startActivity(intent);
+            }
+        });
 
 
     }
@@ -170,6 +180,7 @@ public class ProfileRequestsAdapter extends RecyclerView.Adapter<ProfileRequests
         public TextView requestUserFullName,movieName,year,minQuality,fileType,requestTime;
         public ImageView requestUserPic;
         public Button viewResponsesButton,removeRequestButton;
+
         public MyViewHolder(View view) {
             super(view);
             requestUserPic = (ImageView) view.findViewById(R.id.requestUserPic);
@@ -181,6 +192,7 @@ public class ProfileRequestsAdapter extends RecyclerView.Adapter<ProfileRequests
             fileType = (TextView) view.findViewById(R.id.requestFileLanguage);
             viewResponsesButton = (Button) view.findViewById(R.id.viewResponsesButton);
             removeRequestButton = (Button) view.findViewById(R.id.removeRequestButton);
+
         }
     }
 

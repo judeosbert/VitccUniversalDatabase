@@ -19,17 +19,18 @@
         <item>Other</item>
     </string-array>
     <string-array name="minQuality">
-        <item>Any</item>
         <item>Not Applicable</item>
+    </string-array>
+    <string-array name="minQualityVideo">
+        <item>Any</item>
         <item>Cam Print(Movies)</item>
         <item>360p</item>
         <item>480p</item>
         <item>720p</item>
         <item>1080p</item>
         <item>Blu-ray</item>
-        <item>Scanned Copy (Documents)</item>
-        <item>Print Copy (Documents)</item>
     </string-array>
+
     <string-array name="languages">
         <item>Any</item>
         <item>English</item>
