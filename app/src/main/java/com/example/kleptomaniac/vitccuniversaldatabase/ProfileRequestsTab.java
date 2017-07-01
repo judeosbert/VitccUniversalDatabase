@@ -56,6 +56,9 @@ public class ProfileRequestsTab extends Fragment {
         populateData();
 
 
+
+
+
     }
 
     private void populateData() {
@@ -86,6 +89,7 @@ public class ProfileRequestsTab extends Fragment {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             String lang=null,key=null,minQuality=null,itemName=null,requestTime=null,type=null,requestingUser=null,requestingUserEmail=null,requestingUserPic=null,year = null;
+                            List<String> peers = new ArrayList<String>();
                             for(DataSnapshot snap:dataSnapshot.getChildren())
                             {
                                 Log.e("VITCC","Nested rewquest puller"+snap);
@@ -124,15 +128,21 @@ public class ProfileRequestsTab extends Fragment {
                                     case "year":
                                         year = (String) snap.getValue();
                                         break;
+                                    case "peers":
+                                        peers = (List<String>) snap.getValue();
+
+                                        Log.e("VITCC","Peer Size"+peers.size());
+                                        break;
                                 }
 
                             }
 
-                            ContentRequest request = new ContentRequest(key,type,requestingUserEmail,requestingUser,requestingUserPic,itemName,year,minQuality,lang,null);
-                            requestList.add(request);
+                            ContentRequest request = new ContentRequest(key,type,requestingUserEmail,requestingUser,requestingUserPic,itemName,year,minQuality,lang);
+                            request.addPeers(peers);
+                            requestList.add(0,request);
                             Log.e("VITCC","Data preparation List size"+requestList.size());
                             Log.e("VITCC","Notifier from profile");
-                            profileRequestsAdapter.notifyItemInserted(requestList.size()-1);
+                            profileRequestsAdapter.notifyItemInserted(0);
 //                            profileRequestsAdapter.notifyDataSetChanged();
 
                         }
