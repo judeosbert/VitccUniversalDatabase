@@ -195,7 +195,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.MyViewHo
                         FirebaseAuth mAuth = FirebaseAuth.getInstance();
                         FirebaseUser user = mAuth.getCurrentUser();
                         Date date = new Date();
-                        Answers answer = new Answers(contentRequest.getMovieName(),contentRequest.getRequestType(),contentRequest.getRequestTime(),date.toString(),user.getDisplayName(),user.getEmail().toLowerCase().replace(".",","),user.getPhotoUrl().toString(),contentRequest.getRequestingUser(),contentRequest.getRequestingUserPic(),contentRequest.getRequestingUser());
+                        Answers answer = new Answers(contentRequest.getMovieName(),contentRequest.getRequestType(),contentRequest.getRequestTime(),date.toString(),user.getDisplayName(),user.getEmail().toLowerCase().replace(".",","),user.getPhotoUrl().toString(),contentRequest.getRequestingUser(),contentRequest.getRequestingUserPic(),contentRequest.getRequestingUser(),contentRequest.getYear(),contentRequest.getMinQuality(),contentRequest.getKey());
                         final String pushKey = ref.child(contentRequest.getRequestType()).child(contentRequest.getKey()).child("answers").push().getKey();
                         ref.child(contentRequest.getRequestType()).child(contentRequest.getKey()).child("answers").child(pushKey).setValue(answer, new DatabaseReference.CompletionListener() {
                             @Override

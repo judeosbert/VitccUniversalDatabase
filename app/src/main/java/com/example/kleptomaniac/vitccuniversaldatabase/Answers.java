@@ -6,15 +6,15 @@ package com.example.kleptomaniac.vitccuniversaldatabase;
 
 public class Answers {
 
+    private String requestCode;
+    private String minQuality,year;
     private String requestPersonName,requestPersonKey;
     private String itemName,category,requestDate,answerDate,answerPersonName,answerPersonKey,answerPersonPhoto,requestPersonPhoto;
 
 
-    public Answers()
-    {
-
+    public Answers(){
     }
-    public Answers(String itemName,String category,String requestDate,String answerDate,String answerPersonName,String answerPersonKey,String answerPersonPhoto,String requestPersonName,String requestPersonPhoto,String requestPersonKey)
+    public Answers(String itemName,String category,String requestDate,String answerDate,String answerPersonName,String answerPersonKey,String answerPersonPhoto,String requestPersonName,String requestPersonPhoto,String requestPersonKey,String year,String minQuality,String requestCode)
     {
         this.itemName  = itemName;
         this.category = category;
@@ -26,6 +26,9 @@ public class Answers {
         this.requestPersonPhoto = requestPersonPhoto;
         this.requestPersonName = requestPersonName;
         this.requestPersonKey = requestPersonKey;
+        this.year = year;
+        this.minQuality = minQuality;
+        this.requestCode = requestCode;
     }
 
     public String getItemName()
@@ -67,5 +70,16 @@ public class Answers {
     {
         return this.requestPersonKey;
     }
+    public String getYear()
+    {
+        return this.year;
+    }
+    public String getMinQuality()
+    {
+        return this.minQuality;
+    }
 
+    public String getRequestCode() {
+        return this.requestCode;
+    }
 }

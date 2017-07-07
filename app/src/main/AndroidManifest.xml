@@ -29,14 +29,18 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".LoginActivity">
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CategoryChooserActivity" />
+        <activity
+            android:name=".CategoryChooserActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".UserAdded"
             android:label="@string/title_activity_user_added"
@@ -44,17 +48,20 @@
         <activity
             android:name=".UserDashboard"
             android:label="@string/title_activity_user_dashboard"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".UserProfile"
             android:label="@string/title_activity_user_profile"
             android:parentActivityName=".UserDashboard"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.kleptomaniac.vitccuniversaldatabase.UserDashboard" />
         </activity>
-        <activity android:name=".ViewResponses"></activity>
+        <activity android:name=".ViewResponses" />
+        <activity android:name=".SearchActivity"></activity>
     </application>
 
 </manifest>

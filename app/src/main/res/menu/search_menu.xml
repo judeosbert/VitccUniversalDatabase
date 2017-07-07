@@ -10,14 +10,8 @@
             android:visible="true"
             android:title="Search"
             app:showAsAction="always|collapseActionView"
+            app:actionViewClass="android.support.v7.widget.SearchView"
             />
 
-        <item
-            android:id="@+id/profile_photo"
-            android:visible="true"
-            android:icon="@drawable/ic_user"
-            android:title="Profile"
-            app:showAsAction="ifRoom"
 
-            />
 </menu>

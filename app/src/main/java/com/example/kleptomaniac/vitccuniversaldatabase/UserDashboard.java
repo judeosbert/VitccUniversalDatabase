@@ -2,22 +2,22 @@ package com.example.kleptomaniac.vitccuniversaldatabase;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -61,8 +61,6 @@ public class UserDashboard extends AppCompatActivity {
     Spinner requestType,fileLanguage,fileQuality;
     EditText itemName,year;
     int bottomSelectedIndex;
-
-
 //    SharedPreferences latestPulls = getSharedPreferences("LATESTDATA",MODE_APPEND);
 //    SharedPreferences.Editor edit = latestPulls.edit();
 
@@ -166,9 +164,6 @@ public class UserDashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_dashboard);
-
-
-
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -257,22 +252,28 @@ public class UserDashboard extends AppCompatActivity {
         recyclerViewGame.setAdapter(contentAdapterGame);
 
 
-        //Demo
+        //Attaching Listeners
 
-        //
+        String[] cats = new String[]{"music","movie","series","game","other"}; //// TODO: 4/7/17 Add documents to the category
 
-
-
-
-
+        for(String cat:cats)
+            new AttachListners(cat).execute();
 
 
 
 
-        
+
+
+
+
+
+
         bottomSheetDialog = new BottomSheetDialog(this);
         sheetView = this.getLayoutInflater().inflate(R.layout.activity_add_new_request,null);
         bottomSheetDialog.setContentView(sheetView);
+        bottomSheetDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+
 
         requestType = (Spinner) sheetView.findViewById(R.id.requestTypes);
         fileLanguage = (Spinner) sheetView.findViewById(R.id.requestFileType);
@@ -294,7 +295,7 @@ public class UserDashboard extends AppCompatActivity {
                 }
                 else
                 {
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(sheetView.getContext(),android.R.layout.simple_spinner_item,generalValues);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(sheetView.getContext(),android.R.layout.simple_spinner_dropdown_item,generalValues);
                     fileQuality.setAdapter(adapter);
                 }
 
@@ -331,13 +332,6 @@ public class UserDashboard extends AppCompatActivity {
                 itemNameString  = itemNameValue;
 //                Log.e("VITCC",itemNameValue);
                 String yearValue = year.getText().toString();
-
-
-                if(yearValue.length() != 4 || !yearValue.matches("/[0-9]{4}"))
-                {
-                    yearValue = "";
-
-                }
                 itemName.setText("");
                 year.setText("");
                 databaseAdder(requestTypeValue,itemNameValue,yearValue,fileLanguageValue,fileQualityValue);
@@ -346,7 +340,6 @@ public class UserDashboard extends AppCompatActivity {
 
 
 
-       retreiveData("music");
 
 
     }
@@ -354,119 +347,27 @@ public class UserDashboard extends AppCompatActivity {
 
 
     private void retreiveData(String cat) {
-        int insertIndex = 0;
-        String capCat = cat.substring(0,1).toUpperCase()+cat.substring(1);
-        getSupportActionBar().setTitle(capCat);
-        if(findViewById(R.id.loadingBar).getVisibility() == View.GONE)
-            showNoActivity();
-        if(cat == "d&b")
-        {
-            cat = "document";
-        }
-        try {
+//        int insertIndex = 0;
 
-            if (listnerAdded.contains(cat)) {
-
-                hideNoActivity();
-                insertIndex = 0;
-                return;
-            }
-        }
-        catch (NullPointerException e)
-        {
-            Log.e("VITCC","No data in listnerAdded array");
-        }
-        final String finalCat = cat;
-
-
-            DatabaseReference ref = database.getReference("requests");
-
-        ref.child(cat).addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-
-                    Log.e("VITCC Child Listener",dataSnapshot.getValue().toString());
-                    ContentRequest contentRequest = dataSnapshot.getValue(ContentRequest.class);
-
-
-
-                           if (finalCat == "music")
-                               requestListMusic.add(0,contentRequest);
-                           else if (finalCat == "movie")
-                               requestListMovie.add(0,contentRequest);
-                           else if (finalCat == "series")
-                               requestListSeries.add(0,contentRequest);
-                           else if (finalCat == "document") {
-                               requestListDocument.add(0,contentRequest);
-                           } else if (finalCat == "other") {
-                               requestListOther.add(0,contentRequest);
-                           }
-                           else if(finalCat == "game")
-                           {
-                               requestListGame.add(0,contentRequest);
-                           }
-                    if(finalCat == "music") {
-
-                        listnerAdded.add(finalCat);
-                        contentAdapterMusic.notifyItemInserted(0);
-//                        contentAdapterMusic.notifyDataSetChanged();
-                    }
-                    else if(finalCat == "movie") {
-
-                        listnerAdded.add(finalCat);
-//                        Collections.reverse(requestListMovie);
-                        contentAdapterMovie.notifyItemInserted(0);
-                    }
-                    else if(finalCat == "series") {
-
-                        listnerAdded.add(finalCat);
-//                        Collections.reverse(requestListSeries);
-                        contentAdapterSeries.notifyItemInserted(0);
-                    }
-                    else if(finalCat == "document") {
-
-                        listnerAdded.add(finalCat);
-//                        Collections.reverse(requestListDocument);
-                        contentAdapterDocument.notifyItemInserted(0);
-                    }
-                    else if(finalCat == "other") {
-
-                        listnerAdded.add(finalCat);
-//                        Collections.reverse(requestListOther);
-                        contentAdapterOther.notifyItemInserted(0);
-                    }
-                    else if(finalCat == "game")
-                    {
-                        listnerAdded.add(finalCat);
-                        contentAdapterGame.notifyItemInserted(0);
-                    }
-
-
-                    hideNoActivity();
-                    Log.e("VITCC","Listner added"+listnerAdded.toString());
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+//        if(findViewById(R.id.loadingBar).getVisibility() == View.GONE)
+//            showNoActivity();
+//        if(cat == "d&b")
+//        {
+//            cat = "document";
+//        }
+//        try {
+//
+//            if (listnerAdded.contains(cat)) {
+//
+//                hideNoActivity();
+//                insertIndex = 0;
+//                return;
+//            }
+//        }
+//        catch (NullPointerException e)
+//        {
+//            Log.e("VITCC","No data in listnerAdded array");
+//        }
 
 
 
@@ -483,8 +384,8 @@ public class UserDashboard extends AppCompatActivity {
         findViewById(R.id.textView5).setVisibility(View.GONE);
         findViewById(R.id.button5).setVisibility(View.GONE);
 
-
-        retreiveData(cat);
+        String capCat = cat.substring(0,1).toUpperCase()+cat.substring(1);
+        getSupportActionBar().setTitle(capCat);
 
     }
 
@@ -535,18 +436,12 @@ public class UserDashboard extends AppCompatActivity {
     {
         getMenuInflater().inflate(R.menu.custom_menu,menu);
         final MenuItem searchItem = menu.findItem(R.id.search_lens);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+        searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchView.clearFocus();
+            public boolean onMenuItemClick(MenuItem item) {
+               takeToSearch();
                 return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                return false;
             }
         });
 
@@ -570,6 +465,12 @@ public class UserDashboard extends AppCompatActivity {
         editor.commit();
         startActivity(intent);
 
+    }
+
+    private void takeToSearch()
+    {
+        Intent intent = new Intent(this,SearchActivity.class);
+        startActivity(intent);
     }
 
     public void dummy(View view)
@@ -717,7 +618,122 @@ public class UserDashboard extends AppCompatActivity {
 
 
 
+    class AttachListners extends AsyncTask<Void,Void,Void>
+    {
+        String cat;
+
+        public AttachListners(String cat)
+        {
+            this.cat = cat;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
 
 
+            final String finalCat = cat;
+
+
+            DatabaseReference ref = database.getReference("requests");
+
+            ref.child(cat).addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+                    Log.e("VITCC Child Listener",dataSnapshot.getValue().toString());
+                    ContentRequest contentRequest = dataSnapshot.getValue(ContentRequest.class);
+
+
+
+                    if (finalCat == "music")
+                        requestListMusic.add(0,contentRequest);
+                    else if (finalCat == "movie")
+                        requestListMovie.add(0,contentRequest);
+                    else if (finalCat == "series")
+                        requestListSeries.add(0,contentRequest);
+                    else if (finalCat == "document") {
+                        requestListDocument.add(0,contentRequest);
+                    } else if (finalCat == "other") {
+                        requestListOther.add(0,contentRequest);
+                    }
+                    else if(finalCat == "game")
+                    {
+                        requestListGame.add(0,contentRequest);
+                    }
+                    if(finalCat == "music") {
+
+//                        listnerAdded.add(finalCat);
+                        contentAdapterMusic.notifyItemInserted(0);
+//                        contentAdapterMusic.notifyDataSetChanged();
+                    }
+                    else if(finalCat == "movie") {
+
+//                        listnerAdded.add(finalCat);
+//                        Collections.reverse(requestListMovie);
+                        contentAdapterMovie.notifyItemInserted(0);
+                    }
+                    else if(finalCat == "series") {
+
+//                        listnerAdded.add(finalCat);
+//                        Collections.reverse(requestListSeries);
+                        contentAdapterSeries.notifyItemInserted(0);
+                    }
+                    else if(finalCat == "document") {
+
+//                        listnerAdded.add(finalCat);
+//                        Collections.reverse(requestListDocument);
+                        contentAdapterDocument.notifyItemInserted(0);
+                    }
+                    else if(finalCat == "other") {
+
+//                        listnerAdded.add(finalCat);
+//                        Collections.reverse(requestListOther);
+                        contentAdapterOther.notifyItemInserted(0);
+                    }
+                    else if(finalCat == "game")
+                    {
+//                        listnerAdded.add(finalCat);
+                        contentAdapterGame.notifyItemInserted(0);
+                    }
+
+
+                    hideNoActivity();
+                    Log.e("VITCC","Listner added"+listnerAdded.toString());
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void params)
+        {
+            Log.e("VITCC","Attached Listners to "+cat);
+        }
+
+
+
+    }
 
 }
