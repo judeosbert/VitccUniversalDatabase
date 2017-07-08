@@ -161,12 +161,13 @@
          />
 
     <ProgressBar
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/loadingBar"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:visibility="visible"
+
         />
     <ImageView
         android:layout_width="100dp"

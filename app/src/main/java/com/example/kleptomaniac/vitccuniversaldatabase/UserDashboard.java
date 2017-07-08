@@ -1,13 +1,16 @@
 package com.example.kleptomaniac.vitccuniversaldatabase;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +27,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -33,6 +38,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +68,7 @@ public class UserDashboard extends AppCompatActivity {
     Spinner requestType,fileLanguage,fileQuality;
     EditText itemName,year;
     int bottomSelectedIndex;
+    FirebaseRemoteConfig mRemoteConfig;
 //    SharedPreferences latestPulls = getSharedPreferences("LATESTDATA",MODE_APPEND);
 //    SharedPreferences.Editor edit = latestPulls.edit();
 
@@ -165,6 +173,39 @@ public class UserDashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_dashboard);
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
+        mRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings firebaseRemoteConfigSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(true) // TODO: 8/7/17 Change to false on roll out
+                .build();
+
+        mRemoteConfig.setConfigSettings(firebaseRemoteConfigSettings);
+
+        mRemoteConfig.setDefaults(R.xml.default_remote_config);
+
+        long cacheExpiration = 3600;
+        if(mRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled())
+        {
+            cacheExpiration = 0;
+        }
+
+        mRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            mRemoteConfig.activateFetched();
+
+                            updateViews();
+                        }
+                        else
+                        {
+                            Log.e("VITCC","Remote Config fetch failed");
+                        }
+                    }
+                });
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -344,6 +385,68 @@ public class UserDashboard extends AppCompatActivity {
 
     }
 
+    private void updateViews() {
+
+        boolean isUpdateCompulsory = mRemoteConfig.getBoolean("newUpdateCompulsory");
+        if(isUpdateCompulsory)
+        {
+            showUpdateNotice(false);
+        }
+        boolean isUpdateOptional  = mRemoteConfig.getBoolean("newUpdateOptional");
+        if(isUpdateOptional)
+        {
+            showUpdateNotice(true);
+        }
+    }
+
+    private void showUpdateNotice(boolean dissmisable) {
+        String title="",body = "";
+        if(dissmisable)
+        {
+            title="Optional Update Available";
+            body="There is a new update available with few features updated. This update is optional";
+            AlertDialog updateNotice = new AlertDialog.Builder(this).setMessage(body).setTitle(title).setCancelable(dissmisable).
+                    setPositiveButton("Install", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final String appPackageName = getPackageName();
+                            try
+                            {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+appPackageName)));
+                            }
+                            catch (android.content.ActivityNotFoundException anfe)
+                            {
+                                startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id="+appPackageName)));
+                            }
+                        }
+                    }).setNegativeButton("Cancel",null).show();
+        }
+        else
+        {
+            title="Compulsory Update Availabe";
+            body="This update is necessary for the updated working of the app. Ignoring this will make your app version to crash.";
+            AlertDialog updateNotice = new AlertDialog.Builder(this).setMessage(body).setTitle(title).setCancelable(dissmisable).
+                    setPositiveButton("Install", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final String appPackageName = getPackageName();
+                            try
+                            {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+appPackageName)));
+                            }
+                            catch (android.content.ActivityNotFoundException anfe)
+                            {
+                                startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://play.google.com/store/apps/details?id="+appPackageName)));
+                            }
+                        }
+                    }).show();
+        }
+
+
+
+
+
+    }
 
 
     private void retreiveData(String cat) {

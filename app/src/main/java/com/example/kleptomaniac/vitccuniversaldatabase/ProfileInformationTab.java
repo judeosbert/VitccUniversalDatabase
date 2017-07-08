@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -116,6 +117,7 @@ public class ProfileInformationTab extends Fragment {
         spinnerValue.add("B Block Girls Hostel");
         spinnerValue.add("B Block Boys Hostel");
         spinnerValue.add("C Block");
+        spinnerValue.add("Day Scholer");
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(roomSheetView.getContext(),android.R.layout.simple_spinner_dropdown_item,spinnerValue);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -152,8 +154,16 @@ public class ProfileInformationTab extends Fragment {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
                 FirebaseAuth.getInstance().signOut();
-//                // TODO: 29/6/17  Unsubscribe user from all category topics other than topic info
+                String[] cats = new String[]{"music","movie","series","game","other"}; //// TODO: 4/7/17 Add documents to the category
+
+                for(String cat:cats)
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(cat);
+
+
 
 
                 Intent intent = new Intent(v.getContext(),LoginActivity.class);

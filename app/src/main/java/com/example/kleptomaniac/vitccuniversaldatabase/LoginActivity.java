@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
     private GoogleApiClient mGoogleApiClient;
@@ -223,6 +224,50 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void sendToDashboard() {
         MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
         myFirebaseInstanceIDService.sendRegistrationToServer();
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("users");
+        String key = user.getEmail().toLowerCase().replace(".",",");
+        ref.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user1 = dataSnapshot.getValue(User.class);
+                if(user1.music)
+                {
+                    FirebaseMessaging.getInstance().subscribeToTopic("music");
+                }
+                if(user1.document)
+                {
+                    FirebaseMessaging.getInstance().subscribeToTopic("document");
+                }
+                if(user1.book)
+                {
+                    FirebaseMessaging.getInstance().subscribeToTopic("book");
+                }
+                if(user1.game)
+                {
+                    FirebaseMessaging.getInstance().subscribeToTopic("game");
+                }
+                if(user1.movie)
+                {
+                    FirebaseMessaging.getInstance().subscribeToTopic("movie");
+                }
+                if(user1.series)
+                {
+                    FirebaseMessaging.getInstance().subscribeToTopic("series");
+                }
+
+                FirebaseMessaging.getInstance().subscribeToTopic("updates");
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     startActivity(new Intent(this,UserDashboard.class));
     }
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>newUpdateOptional</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>newUpdateCompulsory</key>
+        <value>false</value>
+    </entry>
+</defaultsMap>
