@@ -140,18 +140,18 @@ public class UserDashboard extends AppCompatActivity {
                             showSubscribeButton("game");
                         }
                         break;
-                    case R.id.navigation_settings:
+                    case R.id.navigation_document:
                         bottomSelectedIndex = 4;
-                        if (userClass.other) {
-                            showContent("other");
+                        if (userClass.document) {
+                            showContent("document");
                             recyclerViewMusic.setVisibility(View.GONE);
                             recyclerViewMovie.setVisibility(View.GONE);
-                            recyclerViewDocument.setVisibility(View.GONE);
+                            recyclerViewDocument.setVisibility(View.VISIBLE);
                             recyclerViewSeries.setVisibility(View.GONE);
-                            recyclerViewOther.setVisibility(View.VISIBLE);
+                            recyclerViewOther.setVisibility(View.GONE);
                             recyclerViewGame.setVisibility(View.GONE);
                         } else {
-                            showSubscribeButton("other");
+                            showSubscribeButton("document");
                         }
                         break;
                     default:
@@ -295,7 +295,7 @@ public class UserDashboard extends AppCompatActivity {
 
         //Attaching Listeners
 
-        String[] cats = new String[]{"music","movie","series","game","other"}; //// TODO: 4/7/17 Add documents to the category
+        String[] cats = new String[]{"music","movie","series","game","document"}; //// TODO: 4/7/17 Add documents to the category
 
         for(String cat:cats)
             new AttachListners(cat).execute();
@@ -529,7 +529,7 @@ public class UserDashboard extends AppCompatActivity {
 
         }
         hideSubscribeButton();
-        retreiveData(subNewCat);
+        Toast.makeText(this, "Tap on the category once more to get data", Toast.LENGTH_SHORT).show();
 
 
     }
@@ -742,6 +742,7 @@ public class UserDashboard extends AppCompatActivity {
             ref.child(cat).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
 
 
                     Log.e("VITCC Child Listener",dataSnapshot.getValue().toString());
