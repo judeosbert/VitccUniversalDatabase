@@ -9,6 +9,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 public class User {
     public String fullName,email,photoURL,roomNo,mobileNumber,messageToken;
     public boolean music,movie,series,book,document,other;
+    //// TODO: 9/7/17 Add lanugage wise category for each sections.
     public boolean game;
 
     public User()

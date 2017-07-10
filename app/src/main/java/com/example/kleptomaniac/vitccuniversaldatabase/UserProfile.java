@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +36,8 @@ public class UserProfile extends AppCompatActivity implements TabLayout.OnTabSel
 
         tabLayout.addTab(tabLayout.newTab().setText("Information"));
         tabLayout.addTab(tabLayout.newTab().setText("Requests"));
+        tabLayout.addTab(tabLayout.newTab().setText("Settings"));
+        tabLayout.addTab(tabLayout.newTab().setText("About"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
 
         ProfileTabAdapter adapter = new ProfileTabAdapter(getSupportFragmentManager());
@@ -63,10 +64,10 @@ public class UserProfile extends AppCompatActivity implements TabLayout.OnTabSel
         currentUserEmail = sharedPreferences.getString("EMAIL","");
         Log.e("VITCC","Profile Tab On Selected"+tab.getPosition()+"CURRENT USER "+user.getDisplayName());
         Log.e("VITCC ","Current User"+currentUserEmail);
-        if(!currentUserEmail.equals(user.getEmail()))
+        if(!currentUserEmail.equals(user.getEmail()) && tab.getPosition() != 3)
         {
             viewPager.setCurrentItem(0);
-            Toast.makeText(getApplicationContext(),"That doesn't concern you",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(),"That doesn't concern you",Toast.LENGTH_SHORT).show();
         }
         else
             viewPager.setCurrentItem(tab.getPosition());

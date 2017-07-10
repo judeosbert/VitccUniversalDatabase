@@ -9,10 +9,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  */
 
 public class ProfileTabAdapter extends FragmentStatePagerAdapter {
-    private final String[] PAGES_TITLES = new String[]{"Information","Requests"};
+    private final String[] PAGES_TITLES = new String[]{"Information","Requests","Settings","Developer"};
     private final Fragment[] PAGES = new Fragment[]{
             new ProfileInformationTab(),
-            new ProfileRequestsTab()
+            new ProfileRequestsTab(),
+            new ProfileSettingsTab(),
+            new ProfileAboutTab()
     };
 
 

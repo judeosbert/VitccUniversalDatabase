@@ -21,8 +21,8 @@
         android:icon="@drawable/ic_games"
         android:title="Games" />
     <item
-        android:id="@+id/navigation_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Others"/>
+        android:id="@+id/navigation_document"
+        android:icon="@drawable/ic_file"
+        android:title="Documents and Books"/>
 
 </menu>
