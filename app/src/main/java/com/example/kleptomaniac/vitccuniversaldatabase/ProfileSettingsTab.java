@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static android.view.View.GONE;
+
 /**
  * Created by kleptomaniac on 9/7/17.
  */
@@ -43,6 +45,7 @@ public class ProfileSettingsTab extends Fragment {
         document = (Switch) view.findViewById(R.id.switch4);
         game = (Switch) view.findViewById(R.id.switch5);
         other = (Switch) view.findViewById(R.id.switch6);
+        other.setVisibility(GONE);
 
         FirebaseAuth mAUth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAUth.getCurrentUser();

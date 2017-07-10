@@ -158,7 +158,7 @@ public class ProfileInformationTab extends Fragment {
 
 
                 FirebaseAuth.getInstance().signOut();
-                String[] cats = new String[]{"music","movie","series","game","other"}; //// TODO: 4/7/17 Add documents to the category
+                String[] cats = new String[]{"music","movie","series","game","other","document"}; //// TODO: 4/7/17 Add documents to the category
 
                 for(String cat:cats)
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(cat);

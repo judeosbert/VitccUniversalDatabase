@@ -295,7 +295,7 @@ public class UserDashboard extends AppCompatActivity {
 
         //Attaching Listeners
 
-        String[] cats = new String[]{"music","movie","series","game","document"}; //// TODO: 4/7/17 Add documents to the category
+        String[] cats = new String[]{"music","movie","series","game","document"}; //// TODO: 4/7/17 Add other to the category
 
         for(String cat:cats)
             new AttachListners(cat).execute();
@@ -325,6 +325,7 @@ public class UserDashboard extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String[] videoValues = new String[]{"Any","Cam Print","240p","360p","480p","720p","1080p","Blu-Ray"};
                 String[] generalValues = new String[]{"Not Applicable"};
+                String[] documentValues = new String[]{"Hard Copy","E-Book","Scanned"};
 
 
                 String selectedItem = parent.getItemAtPosition(position).toString();
@@ -332,6 +333,11 @@ public class UserDashboard extends AppCompatActivity {
                 if(selectedItem.equals("Movie") || selectedItem.equals("Series"))
                 {
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(sheetView.getContext(),android.R.layout.simple_spinner_dropdown_item,videoValues);
+                    fileQuality.setAdapter(adapter);
+                }
+                else if(selectedItem.equals("Document"))
+                {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(sheetView.getContext(),android.R.layout.simple_spinner_dropdown_item,documentValues);
                     fileQuality.setAdapter(adapter);
                 }
                 else

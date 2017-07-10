@@ -31,6 +31,7 @@ public class CategoryChooserActivity extends AppCompatActivity {
         gameBox = (CheckBox) findViewById(R.id.gamesBox);
         documentBox = (CheckBox) findViewById(R.id.documentBox);
         otherBox  = (CheckBox) findViewById(R.id.othersBox);
+        otherBox.setVisibility(View.GONE);
 
 
 
